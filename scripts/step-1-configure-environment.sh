@@ -13,14 +13,14 @@ LENGTH=32
 # Ensure the script is running from the Wavelog project root directory
 if [[ ! -f "docker-compose.yaml" ]]; then
     echo "ERROR: This script must be run from the Wavelog project root, not from the scripts directory." >&2
-    echo "Try running as: sudo ./scripts/$(basename ${0})" >&2
+    echo "Try running as: ${CYAN}sudo ./scripts/$(basename ${0})${NC}" >&2
     exit 1
 fi
 
 # Ensure the script is being run as root
 if [[ "$EUID" -ne 0 ]]; then
     echo "ERROR: This script must be run as root." >&2
-    echo "Try running as: sudo ./scripts/$(basename ${0})" >&2
+    echo "Try running as: ${CYAN}sudo ./scripts/$(basename ${0})${NC}" >&2
     exit 1
 fi
 
@@ -48,7 +48,7 @@ mv "$tmpfile" "$SECRETS_FILE"
 
 # Ensure Docker daemon is started and enabled on boot
 if command -v systemctl >/dev/null 2>&1; then
-  systemctl enable docker
+  systemctl enable docker 2>/dev/null
   systemctl start docker
 fi
 

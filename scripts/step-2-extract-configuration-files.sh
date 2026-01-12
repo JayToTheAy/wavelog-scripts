@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Colors
+CYAN='\033[0;36m'
+NC='\033[0m'
+
 # Variables
 IMAGE_NAME="ghcr.io/wavelog/wavelog:latest"
 CONFIG_PATH="/var/www/html/application/config"
@@ -11,14 +15,14 @@ COMPOSE_DST="./docker-compose.yaml"
 # Ensure the script is running from the Wavelog project root directory
 if [[ ! -f "docker-compose.yaml" ]]; then
     echo "ERROR: This script must be run from the Wavelog project root, not from the scripts directory." >&2
-    echo "Try running as: sudo ./scripts/$(basename ${0})" >&2
+    echo "Try running as: ${CYAN}sudo ./scripts/$(basename ${0})${NC}" >&2
     exit 1
 fi
 
 # Ensure the script is being run as root
 if [[ "$EUID" -ne 0 ]]; then
     echo "ERROR: This script must be run as root." >&2
-    echo "Try running as: sudo ./scripts/$(basename ${0})" >&2
+    echo "Try running as: ${CYAN}sudo ./scripts/$(basename ${0})${NC}" >&2
     exit 1
 fi
 
@@ -43,14 +47,18 @@ chmod 0644 "${CONFIG_DEST}/config.php"
 chmod 0644 "${CONFIG_DEST}/wavelog.php"
 
 # Remove the temporary container
-docker rm "$TEMP_CONTAINER"
+docker rm "$TEMP_CONTAINER" 1>/dev/null
 
 # Ensure the post-setup config exists
 if [[ ! -f "$COMPOSE_SRC" ]]; then
-    echo "ERROR: Post-setup docker compose file '$SRC' does not exist." >&2
+    echo "ERROR: Post-setup docker compose file '$COMPOSE_SRC' does not exist." >&2
     exit 1
 fi
 
 # Move the file
-mv "$SRC" "$DEST"
+mv "$COMPOSE_SRC" "$COMPOSE_DST"
+
+# Report success
+echo -e "Successfully extracted configuration files. You can edit them in the ${CYAN}${CONFIG_DEST}${NC} directory."
+echo -e "Apply changes by running: ${CYAN}sudo ./scripts/apply-configuration-changes.sh${NC}"
 
