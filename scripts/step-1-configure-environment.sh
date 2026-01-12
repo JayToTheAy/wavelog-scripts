@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Colors
+CYAN='\033[0;36m'
+NC='\033[0m'
+
 # Variables
 SECRETS_DIR="./secrets"
 SECRETS_FILE="${SECRETS_DIR}/db.env"
@@ -41,4 +45,22 @@ MARIADB_PASSWORD=${DB_PASSWORD}
 EOF
 
 mv "$tmpfile" "$SECRETS_FILE"
+
+# Ensure Docker daemon is started and enabled on boot
+if command -v systemctl >/dev/null 2>&1; then
+  systemctl enable docker
+  systemctl start docker
+fi
+
+# Start the application
+docker compose up -d
+
+# Report success
+echo -e "Successfully configured Wavelog environment. Visit ${CYAN}http://localhost:8086${NC} in your browser to continue setup. Once that is complete, proceed to Step 2."
+echo -e "Database credentials:"
+echo -e "Hostname: ${CYAN}wavelog-db${CN}"
+echo -e "Database Name: ${CYAN}wavelog${NC}"
+echo -e "Username: ${CYANwavelog${NC}"
+echo -e "Password: ${CYAN}${DB_PASSWORD}${NC}."
+echo -e "The password is stored in {$CYAN}./secrets/db.env${NC}."
 
