@@ -18,7 +18,7 @@ if command -v systemctl >/dev/null 2>&1; then
 fi
 
 # Generate database password
-DB_PASSWORD="$(tr -dc 'A-Za-z0-9!@#$%^&*()-_=+{}' < /dev/urandom | head -c "$LENGTH")"
+DB_PASSWORD="$(head -c 1000 /dev/urandom | tr -dc 'A-Za-z0-9!@#$%^&*()-_=+{}' | head -c "$LENGTH")"
 
 # Create secrets directory
 mkdir -p "$SECRETS_DIR"
