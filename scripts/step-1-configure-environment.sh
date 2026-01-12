@@ -4,7 +4,7 @@ set -euo pipefail
 # Variables
 SECRETS_DIR="./secrets"
 SECRETS_FILE="${SECRETS_DIR}/db.env"
-
+LENGTH=32
 
 # Ensure the script is running from the Wavelog project root directory
 if [[ ! -f "docker-compose.yaml" ]]; then
