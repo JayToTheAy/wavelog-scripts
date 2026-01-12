@@ -10,7 +10,7 @@ IMAGE_NAME="ghcr.io/wavelog/wavelog:latest"
 CONFIG_PATH="/var/www/html/application/config"
 CONFIG_DEST="./config"
 COMPOSE_SRC="post-setup/docker-compose.yaml"
-COMPOSE_DST="./docker-compose.yaml"
+COMPOSE_DEST="./docker-compose.yaml"
 
 # Ensure the script is running from the Wavelog project root directory
 if [[ ! -f "docker-compose.yaml" ]]; then
@@ -56,7 +56,7 @@ if [[ ! -f "$COMPOSE_SRC" ]]; then
 fi
 
 # Move the file
-mv "$COMPOSE_SRC" "$COMPOSE_DST"
+mv "$COMPOSE_SRC" "$COMPOSE_DEST"
 
 # Report success
 echo -e "Successfully extracted configuration files. You can edit them in the ${CYAN}config${NC} directory."

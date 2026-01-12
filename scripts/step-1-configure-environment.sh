@@ -9,6 +9,8 @@ NC='\033[0m'
 SECRETS_DIR="./secrets"
 SECRETS_FILE="${SECRETS_DIR}/db.env"
 LENGTH=32
+COMPOSE_SRC="pre-setup/docker-compose.yaml"
+COMPOSE_DEST="./docker-compose.yaml"
 
 # Ensure the script is running from the Wavelog project root directory
 if [[ ! -f "docker-compose.yaml" ]]; then
@@ -29,6 +31,15 @@ if [[ -e "$SECRETS_FILE" ]]; then
     echo "ERROR: Secrets file already exists. Aborting to prevent overwriting secrets." >&2
     exit 1
 fi
+
+# Ensure the pre-setup config exists
+if [[ ! -f "$COMPOSE_SRC" ]]; then
+    echo "ERROR: Pre-setup docker compose file '$COMPOSE_SRC' does not exist." >&2
+    exit 1
+fi
+
+# Move the file
+mv "$COMPOSE_SRC" "$COMPOSE_DEST"
 
 # Generate database password
 DB_PASSWORD="$(head -c 1000 /dev/urandom | tr -dc 'A-Za-z0-9' | head -c "$LENGTH")"
