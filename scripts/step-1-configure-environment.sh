@@ -60,7 +60,7 @@ echo -e "Successfully configured Wavelog environment. Visit ${CYAN}http://localh
 echo -e "Database credentials:"
 echo -e "Hostname: ${CYAN}wavelog-db${NC}"
 echo -e "Database Name: ${CYAN}wavelog${NC}"
-echo -e "Username: ${CYANwavelog${NC}"
+echo -e "Username: ${CYAN}wavelog${NC}"
 echo -e "Password: ${CYAN}${DB_PASSWORD}${NC}."
 echo -e "The password is stored in {$CYAN}./secrets/db.env${NC}."
 
