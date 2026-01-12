@@ -1,2 +1,4 @@
 config/
 secrets/
+
+docker-compose.yaml
