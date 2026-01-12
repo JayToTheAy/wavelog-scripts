@@ -1,24 +1,38 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Ensure the script is running as root
+if [[ "$EUID" -ne 0 ]]; then
+    echo "ERROR: This script must be run as root." >&2
+    echo "Try running with sudo: sudo $0" >&2
+    exit 1
+fi
+
+
 # Variables
 SERVICE_NAME="wavelog-main"
-APP_PATH="/var/www/html/application/config/config.php"
-VAR_PATH="/var/www/html/application/config/wavelog.php"
-APP_DEST="./config/config.php"
-VAR_DEST="./config/wavelog.php"
+CONFIG_PATH="/var/www/html/application/config"
+CONFIG_DEST="./config"
+APP_CONFIG="config.php"
+VAR_CONFIG="wavelog.php"
 LENGTH=32
 SECRETS_DIR="./secrets"
 SECRETS_FILE="${SECRETS_DIR}/db.env"
 
 # Ensure Docker daemon is enabled on boot
 if command -v systemctl >/dev/null 2>&1; then
-  sudo systemctl enable docker
-  sudo systemctl start docker
+  systemctl enable docker
+  systemctl start docker
 fi
 
+mkdir -p "${CONFIG_DEST}"
+touch "${CONFIG_DEST}/${APP_CONFIG}"
+touch "${CONFIG_DEST}/${VAR_CONFIG}"
+chmod 0644 "${CONFIG_DEST}/${APP_CONFIG}"
+chmod 0644 "${CONFIG_DEST}/${VAR_CONFIG}"
+
 # Generate database password
-DB_PASSWORD="$(head -c 1000 /dev/urandom | tr -dc 'A-Za-z0-9!@#$%^&*()-_=+{}' | head -c "$LENGTH")"
+DB_PASSWORD="$(head -c 100 /dev/urandom | tr -dc 'A-Za-z0-9!@#$%^&*()-_=+{}' | head -c "$LENGTH")"
 
 # Create secrets directory
 mkdir -p "$SECRETS_DIR"
@@ -48,9 +62,9 @@ if [[ -z "${CONTAINER_ID}" ]]; then
 fi
 
 # Copy the file out of the container
-docker cp "${CONTAINER_ID}:${APP_PATH}" "${APP_DEST}"
-echo "Copied ${APP_PATH} to ${APP_DEST}"
+docker cp "${CONTAINER_ID}:${CONFIG_PATH}/${APP_CONFIG}" "${CONFIG_DEST}/${APP_CONFIG}"
+echo "Copied ${CONFIG_PATH}/${APP_CONFIG} to ${CONFIG_DEST}/${APP_CONFIG}"
 
-docker cp "${CONTAINER_ID}:${VAR_PATH}" "${VAR_DEST}"
-echo "Copied ${VAR_PATH} to ${VAR_DEST}"
+docker cp "${CONTAINER_ID}:${CONFIG_PATH}/${VAR_CONFIG}" "${CONFIG_DEST}/${VAR_CONFIG}"
+echo "Copied ${CONFIG_PATH}/${VAR_CONFIG} to ${CONFIG_DEST}/${VAR_CONFIG}"
 
