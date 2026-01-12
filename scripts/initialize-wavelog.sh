@@ -9,7 +9,7 @@ APP_DEST="./config/config.php"
 VAR_DEST="./config/wavelog.php"
 LENGTH=32
 SECRETS_DIR="./secrets"
-SECRETS_FILE="${OUT_DIR}/db.env"
+SECRETS_FILE="${SECRETS_DIR}/db.env"
 
 # Ensure Docker daemon is enabled on boot
 if command -v systemctl >/dev/null 2>&1; then
