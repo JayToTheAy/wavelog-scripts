@@ -39,7 +39,7 @@ mkdir -p "${CONFIG_DEST}"
 TEMP_CONTAINER=$(docker create "$IMAGE_NAME")
 
 # Extract the files
-docker cp "${TEMP_CONTAINER}:/var/www/html/application/config/config.sample.php" "${CONFIG_DEST}/config.php"
+docker cp "${TEMP_CONTAINER}:/var/www/html/application/config/docker/config.php" "${CONFIG_DEST}/config.php"
 docker cp "${TEMP_CONTAINER}:/var/www/html/application/config/wavelog.php" "${CONFIG_DEST}/wavelog.php"
 
 # Set correct permissions
