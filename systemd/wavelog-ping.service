@@ -4,4 +4,4 @@ Requires=network-online.target
 
 [Service]
 Type=oneshot
-ExecStart= ./home/ubuntu/wavelog-scripts/scripts/monitor-health.sh tor-health.sh
+ExecStart=/home/ubuntu/wavelog-scripts/scripts/monitor-health.sh tor-health.sh
