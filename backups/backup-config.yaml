@@ -342,9 +342,8 @@ keep_yearly: 10
 
 # List of one or more shell commands or scripts to execute before all
 # the actions for each repository.
-before_actions:
-    - echo Starting actions.
-    - docker compose -f {wavelog_script_path}/docker-compose.yaml down
+# before_actions:
+    # - echo Starting actions.
 
 # List of one or more shell commands or scripts to execute before
 # creating a backup, run once per repository.
@@ -411,15 +410,16 @@ on_error:
 # running all actions (if one of them is "create"). These are
 # collected from all configuration files and then run once before all
 # of them (prior to all actions).
-# before_everything:
-    # - echo Starting actions.
+before_everything:
+    - echo Starting actions. Bringing Wavelog down.
+    - docker compose -f {wavelog_script_path}/docker-compose.yaml down
 
 # List of one or more shell commands or scripts to execute after
 # running all actions (if one of them is "create"). These are
 # collected from all configuration files and then run once after all
 # of them (after any action).
 after_everything:
-    - echo Completed actions.
+    - echo Completed actions. Bringing Wavelog back up.
     - docker compose -f {wavelog_script_path}/docker-compose.yaml up -d
 
 # Support for the "borgmatic bootstrap" action, used to extract
