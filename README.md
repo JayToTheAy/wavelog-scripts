@@ -17,6 +17,6 @@ Setting up and maintaining a Wavelog instance isn't always as straightforward as
 To setup health check monitoring, [create a project with healthchecks.io](https://healthchecks.io/docs/), then:
 1. modify `scripts/monitor_health.sh` with the appropriate `HCURL` and `WAVELOG_URL`
 2. Run `sudo cp systemd /etc/systemd/system -r` to move systemd config
-3. Run `systemctl start wavelog-ping`
+3. Run `systemctl start wavelog-ping.timer`
 
 This should check over-the-internet that your wavelog instance is available and returning a `200 OK` status code. If it is, it'll ping with a success; if it isn't, it'll ping with a failure and tell healthchecks.io what status code it received in the body.
